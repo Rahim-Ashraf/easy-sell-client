@@ -8,6 +8,8 @@ const Products = () => {
     const [totalProducts, setTotalProducts] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [bang, setBang] = useState(true)
+    const [brandName, setBrandName] = useState("");
+    const [categoryName, setCategoryName] = useState("");
 
     useEffect(() => {
         axios.get("https://easy-sell-server-one.vercel.app/products")
@@ -68,6 +70,10 @@ const Products = () => {
         }
     }
 
+    const handleFilter = (e) => {
+        e.preventDefault();
+    }
+
     return (
         <div>
             <h2 className="text-center my-6 text-2xl font-bold">Products</h2>
@@ -86,7 +92,7 @@ const Products = () => {
                         <label className="label">
                             <h3 className="font-bold">Sort Products</h3>
                         </label>
-                        <select defaultValue={"select"} onChange={handleSort} name="category" className="select select-bordered w-fit">
+                        <select defaultValue={"select"} onChange={handleSort} className="select select-bordered w-fit">
                             <option disabled value="select">Select</option>
                             <option value="low-to-high">Price Low to High</option>
                             <option value="high-to-low">Price High to Low</option>
@@ -94,6 +100,54 @@ const Products = () => {
                         </select>
                     </div>
                 </div>
+            </div>
+            <div className="mb-6 max-w-screen-lg mx-auto">
+                <h3 className="font-bold text-xl my-2 text-center">Categorization</h3>
+                <form onSubmit={handleFilter} className="flex gap-2 items-end justify-center">
+                    <div>
+                        <h3 className="font-bold">Brand Name</h3>
+                        <select defaultValue={"select"} className="select select-bordered w-fit">
+                            <option disabled value="select">Select</option>
+                            <option value="SoundMagic">SoundMagic</option>
+                            <option value="TechMate">TechMate</option>
+                            <option value="ComputePro">ComputePro</option>
+                            <option value="KitchenEase">KitchenEase</option>
+                            <option value="FitPulse">FitPulset</option>
+                            <option value="SmilePro">SmilePro</option>
+                            <option value="Echo">Echo</option>
+                            <option value="FastTrack">FastTrack</option>
+                            <option value="BrightLite">BrightLite</option>
+                            <option value="TravelEase">TravelEase</option>
+                            <option value="PureFlow">PureFlow</option>
+                            <option value="RideSmart">RideSmart</option>
+                            <option value="GameMaster">GameMaster</option>
+                            <option value="PowerTool">PowerTool</option>
+                            <option value="CleanSweep">CleanSweep</option>
+                            <option value="VisionX">VisionX</option>
+                            <option value="ClimateControl">ClimateControl</option>
+                        </select>
+                    </div>
+                    <div>
+                        <h3 className="font-bold">Category Name</h3>
+                        <select defaultValue={"select"} className="select select-bordered w-fit">
+                            <option disabled value="select">Select</option>
+                            <option value="Electronics">Electronics</option>
+                            <option value="Computers">Computers</option>
+                            <option value="Home Appliances">Home Appliances</option>
+                            <option value="Personal Care">Personal Care</option>
+                            <option value="Smart Home">Smart Home</option>
+                            <option value="Footwear">Footwear</option>
+                            <option value="Furniture">Furniture</option>
+                            <option value="Sports">Sports</option>
+                            <option value="Wearables">Wearables</option>
+                            <option value="Accessories">Accessories</option>
+                            <option value="Home Decor">Home Decor</option>
+                            <option value="Tools">Tools</option>
+                            <option value="Outdoor">Outdoor</option>
+                        </select>
+                    </div>
+                    <input type="submit" value="Apply Filter" className="btn bg-emerald-600 text-white" />
+                </form>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {
