@@ -4,8 +4,10 @@ import Product from "./Product/Product"
 
 
 const Products = () => {
-    const [products, setProducts] = useState();
-    const [totalProducts, setTotalProducts] = useState();
+    const [products, setProducts] = useState([]);
+    const [totalProducts, setTotalProducts] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+
     useEffect(() => {
         axios.get("http://localhost:3000/products")
             .then(res => {
@@ -22,26 +24,76 @@ const Products = () => {
     const pages = Math.ceil(totalProducts / 12)
 
     const onPageClick = async (pageNum) => {
+        setCurrentPage(pageNum);
         const res = await axios.get(`http://localhost:3000/single-page-products?skip=${(pageNum * 12) - 12}`);
         const data = await res.data;
         setProducts(data);
         console.log(data)
     }
+    const onPrevClick = () => {
+        setCurrentPage(currentPage - 1);
+        onPageClick(currentPage - 1);
+    }
+    const onNextClick = () => {
+        setCurrentPage(currentPage + 1);
+        onPageClick(currentPage + 1);
+    }
+
+    const handleSearch = e => {
+        e.preventDefault();
+        const text = e.target.search.value;
+        axios.get(`http://localhost:3000/products-by-name?text=${text}`)
+            .then(res => {
+                setProducts(res.data)
+                // console.log(res.data)
+            });
+        e.target.search.value = ""
+    }
 
     return (
         <div>
             <h2 className="text-center my-10 text-2xl font-bold">Products</h2>
+            <div className="md:flex justify-center items-center gap-10">
+                <div className="">
+                    <h2 className="text-xl font-bold">Search by Location</h2>
+                    <form onSubmit={handleSearch}>
+                        <label className="input input-bordered flex items-center gap-2">
+                            <input type="text" name="search" className="grow" placeholder="Search" />
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path fillRule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clipRule="evenodd" /></svg>
+                        </label>
+                    </form>
+                </div>
+                {/* <div className=" flex justify-center">
+                    <div>
+                        <label className="label">
+                            <h3 className="font-bold">filter by Price Range</h3>
+                        </label>
+                        <select onChange={handlePriceChange} name="category" className="select select-bordered w-fit">
+                            <option value="All">All</option>
+                            <option value="0-1000">0-1000</option>
+                            <option value="1001-10000">1001-10000</option>
+                            <option value="10001-100000">10001-100000</option>
+                            <option value="100001-1000000">100001-1000000</option>
+                            <option value="1000001-10000000">1000001-10000000</option>
+                        </select>
+                    </div>
+                </div> */}
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {
                     products?.map(product => <Product key={product._id} product={product}></Product>)
                 }
             </div>
             <div className="flex justify-center gap-4 my-4">
-                <button className="btn btn-primary">Previous</button>
+                {
+                    currentPage <= 1 || <button onClick={onPrevClick} className="btn btn-primary">Previous</button>
+                }
                 {
                     Array.from({ length: pages }).map((_item, index) => <button onClick={() => onPageClick(index + 1)} key={index} className="btn btn-primary">{index + 1}</button>)
                 }
-                <button className="btn btn-primary">Next</button>
+                {
+                    currentPage >= pages || <button onClick={onNextClick} className="btn btn-primary">Next</button>
+                }
             </div>
         </div>
     );
