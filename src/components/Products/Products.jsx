@@ -10,13 +10,13 @@ const Products = () => {
     const [bang, setBang] = useState(true)
 
     useEffect(() => {
-        axios.get("http://localhost:3000/products")
+        axios.get("https://easy-sell-server-one.vercel.app/products")
             .then(res => {
                 setTotalProducts(res.data.length);
             })
     }, [])
     useEffect(() => {
-        axios.get("http://localhost:3000/single-page-products?skip=0")
+        axios.get("https://easy-sell-server-one.vercel.app/single-page-products?skip=0")
             .then(res => {
                 setProducts(res.data);
             })
@@ -25,7 +25,7 @@ const Products = () => {
 
     const onPageClick = async (pageNum) => {
         setCurrentPage(pageNum);
-        const res = await axios.get(`http://localhost:3000/single-page-products?skip=${(pageNum * 12) - 12}`);
+        const res = await axios.get(`https://easy-sell-server-one.vercel.app/single-page-products?skip=${(pageNum * 12) - 12}`);
         const data = await res.data;
         setProducts(data);
         console.log(data)
@@ -42,7 +42,7 @@ const Products = () => {
     const handleSearch = e => {
         e.preventDefault();
         const text = e.target.search.value;
-        axios.get(`http://localhost:3000/products-by-name?text=${text}`)
+        axios.get(`https://easy-sell-server-one.vercel.app/products-by-name?text=${text}`)
             .then(res => {
                 setProducts(res.data)
                 // console.log(res.data)
