@@ -15,7 +15,7 @@ const Product = ({ product }) => {
                     <p>Category: {product.category_name}</p>
                 </div>
                 <p>Upload Date: {product.added_date}</p>
-                <h4 className="btn btn-primary text-white">${product.price}</h4>
+                <h4 className="btn bg-emerald-600 text-white">${product.price}</h4>
             </div>
         </div>
     );

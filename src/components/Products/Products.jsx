@@ -70,8 +70,19 @@ const Products = () => {
         }
     }
 
+    const handleBrandNameChange = (e) => {
+        setBrandName(e.target.value);
+    }
+    const handleCategoryChange = (e) => {
+        setCategoryName(e.target.value);
+    }
     const handleFilter = (e) => {
         e.preventDefault();
+        axios.get(`https://easy-sell-server-one.vercel.app/filterd-products?brandName=${brandName}&categoryName=${categoryName}`)
+            .then(res => {
+                console.log(res.data);
+                setProducts(res.data);
+            })
     }
 
     return (
@@ -103,11 +114,11 @@ const Products = () => {
             </div>
             <div className="mb-6 max-w-screen-lg mx-auto">
                 <h3 className="font-bold text-xl my-2 text-center">Categorization</h3>
-                <form onSubmit={handleFilter} className="flex gap-2 items-end justify-center">
+                <form onSubmit={handleFilter} className="flex gap-2 items-end justify-center border border-emerald-600 rounded-lg p-2">
                     <div>
                         <h3 className="font-bold">Brand Name</h3>
-                        <select defaultValue={"select"} className="select select-bordered w-fit">
-                            <option disabled value="select">Select</option>
+                        <select onChange={handleBrandNameChange} defaultValue={"select"} className="select select-bordered w-fit">
+                            <option value="">Select</option>
                             <option value="SoundMagic">SoundMagic</option>
                             <option value="TechMate">TechMate</option>
                             <option value="ComputePro">ComputePro</option>
@@ -129,8 +140,8 @@ const Products = () => {
                     </div>
                     <div>
                         <h3 className="font-bold">Category Name</h3>
-                        <select defaultValue={"select"} className="select select-bordered w-fit">
-                            <option disabled value="select">Select</option>
+                        <select onChange={handleCategoryChange} defaultValue={"select"} className="select select-bordered w-fit">
+                            <option value="">Select</option>
                             <option value="Electronics">Electronics</option>
                             <option value="Computers">Computers</option>
                             <option value="Home Appliances">Home Appliances</option>
@@ -146,6 +157,13 @@ const Products = () => {
                             <option value="Outdoor">Outdoor</option>
                         </select>
                     </div>
+                    <div>
+                        <h3 className="font-bold">Price Range</h3>
+                        <div className="border p-2 rounded">
+                            <input type="text" placeholder="Min" className="input input-sm input-bordered max-w-24" />
+                            <input type="text" placeholder="Max" className="input input-sm input-bordered max-w-24 ml-1" />
+                        </div>
+                    </div>
                     <input type="submit" value="Apply Filter" className="btn bg-emerald-600 text-white" />
                 </form>
             </div>
@@ -156,13 +174,13 @@ const Products = () => {
             </div>
             <div className="flex justify-center gap-4 my-4">
                 {
-                    currentPage <= 1 || <button onClick={onPrevClick} className="btn btn-primary">Previous</button>
+                    currentPage <= 1 || <button onClick={onPrevClick} className="btn bg-[#0055ff] text-white">Previous</button>
                 }
                 {
-                    Array.from({ length: pages }).map((_item, index) => <button onClick={() => onPageClick(index + 1)} key={index} className="btn btn-primary">{index + 1}</button>)
+                    Array.from({ length: pages }).map((_item, index) => <button onClick={() => onPageClick(index + 1)} key={index} className="btn bg-[#0055ff] text-white">{index + 1}</button>)
                 }
                 {
-                    currentPage >= pages || <button onClick={onNextClick} className="btn btn-primary">Next</button>
+                    currentPage >= pages || <button onClick={onNextClick} className="btn bg-[#0055ff] text-white">Next</button>
                 }
             </div>
         </div>
