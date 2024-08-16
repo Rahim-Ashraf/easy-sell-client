@@ -4,7 +4,8 @@ import { AuthContext } from "../../Provider/Provider";
 
 
 const Navbar = () => {
-    const { logOut } = useContext(AuthContext);
+    const { user, logOut } = useContext(AuthContext);
+    console.log(user?.photoURL)
 
     const handleLogout = () => {
         logOut()
@@ -17,22 +18,13 @@ const Navbar = () => {
             </div>
 
             <div className="navbar-end">
-                {/* {user ? <details className="dropdown dropdown-end">
-                    <summary tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                        <div className="w-10 rounded-full">
-                            <img alt="Tailwind CSS Navbar component" src={user?.photoURL} />
-                        </div>
-                    </summary >
-                    <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                        <li><button onClick={handleLogout} className="btn btn-error text-white">Logout</button></li>
-                    </ul>
-                </details>
-                    : */}
-                <>
-                    <Link to="/login"><button className="ml-4 btn bg-[#0055ff] text-white font-bold">Login</button></Link>
-                    <Link to="/login"><button className="ml-4 btn bg-[#0055ff] text-white font-bold">Register</button></Link>
-                </>
-                {/* } */}
+                {user ? <button onClick={handleLogout} className="btn btn-error text-white">Logout</button>
+                    :
+                    <>
+                        <Link to="/login"><button className="ml-4 btn bg-[#0055ff] text-white font-bold">Login</button></Link>
+                        <Link to="/register"><button className="ml-4 btn bg-[#0055ff] text-white font-bold">Register</button></Link>
+                    </>
+                }
             </div>
 
         </div>

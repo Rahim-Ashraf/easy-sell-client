@@ -60,6 +60,11 @@ const Products = () => {
             setProducts(sortedProducts);
             setBang(!bang);
             return
+        } else if (e.target.value === "newest-first") {
+            const sortedProducts = products.sort(function (a, b) { return new Date(b.added_date) - new Date(a.added_date) })
+            setProducts(sortedProducts);
+            setBang(!bang);
+            return
         }
     }
 
