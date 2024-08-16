@@ -7,6 +7,7 @@ const Products = () => {
     const [products, setProducts] = useState([]);
     const [totalProducts, setTotalProducts] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
+    const [bang, setBang] = useState(true)
 
     useEffect(() => {
         axios.get("http://localhost:3000/products")
@@ -19,8 +20,7 @@ const Products = () => {
             .then(res => {
                 setProducts(res.data);
             })
-    }, [])
-    console.log(totalProducts)
+    }, []);
     const pages = Math.ceil(totalProducts / 12)
 
     const onPageClick = async (pageNum) => {
@@ -49,13 +49,26 @@ const Products = () => {
             });
         e.target.search.value = ""
     }
+    const handleSort = (e) => {
+        if (e.target.value === "low-to-high") {
+            const sortedProducts = products.sort(function (a, b) { return a.price - b.price })
+            setProducts(sortedProducts);
+            setBang(!bang);
+            return
+        } else if (e.target.value === "high-to-low") {
+            const sortedProducts = products.sort(function (a, b) { return b.price - a.price })
+            setProducts(sortedProducts);
+            setBang(!bang);
+            return
+        }
+    }
 
     return (
         <div>
-            <h2 className="text-center my-10 text-2xl font-bold">Products</h2>
-            <div className="md:flex justify-center items-center gap-10">
+            <h2 className="text-center my-6 text-2xl font-bold">Products</h2>
+            <div className="md:flex justify-center items-center gap-10 mb-6">
                 <div className="">
-                    <h2 className="text-xl font-bold">Search by Location</h2>
+                    <h2 className="text-xl font-bold">Search by Product Name</h2>
                     <form onSubmit={handleSearch}>
                         <label className="input input-bordered flex items-center gap-2">
                             <input type="text" name="search" className="grow" placeholder="Search" />
@@ -63,21 +76,19 @@ const Products = () => {
                         </label>
                     </form>
                 </div>
-                {/* <div className=" flex justify-center">
+                <div className=" flex justify-center">
                     <div>
                         <label className="label">
-                            <h3 className="font-bold">filter by Price Range</h3>
+                            <h3 className="font-bold">Sort Products</h3>
                         </label>
-                        <select onChange={handlePriceChange} name="category" className="select select-bordered w-fit">
-                            <option value="All">All</option>
-                            <option value="0-1000">0-1000</option>
-                            <option value="1001-10000">1001-10000</option>
-                            <option value="10001-100000">10001-100000</option>
-                            <option value="100001-1000000">100001-1000000</option>
-                            <option value="1000001-10000000">1000001-10000000</option>
+                        <select defaultValue={"select"} onChange={handleSort} name="category" className="select select-bordered w-fit">
+                            <option disabled value="select">Select</option>
+                            <option value="low-to-high">Price Low to High</option>
+                            <option value="high-to-low">Price High to Low</option>
+                            <option value="newest-first">Newest first</option>
                         </select>
                     </div>
-                </div> */}
+                </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {
