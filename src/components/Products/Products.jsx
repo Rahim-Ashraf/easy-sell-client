@@ -10,6 +10,8 @@ const Products = () => {
     const [bang, setBang] = useState(true)
     const [brandName, setBrandName] = useState("");
     const [categoryName, setCategoryName] = useState("");
+    const [minPrice, setMinPrice] = useState("");
+    const [maxPrice, setMaxPrice] = useState("");
 
     useEffect(() => {
         axios.get("https://easy-sell-server-one.vercel.app/products")
@@ -78,12 +80,12 @@ const Products = () => {
     }
     const handleFilter = (e) => {
         e.preventDefault();
-        axios.get(`https://easy-sell-server-one.vercel.app/filterd-products?brandName=${brandName}&categoryName=${categoryName}`)
+        axios.get(`https://easy-sell-server-one.vercel.app/filterd-products?brandName=${brandName}&categoryName=${categoryName}&minPrice=${minPrice}&maxPrice=${maxPrice}`)
             .then(res => {
-                console.log(res.data);
                 setProducts(res.data);
             })
     }
+    console.log(minPrice, maxPrice)
 
     return (
         <div>
@@ -112,13 +114,13 @@ const Products = () => {
                     </div>
                 </div>
             </div>
-            <div className="mb-6 max-w-screen-lg mx-auto">
+            <div className="mb-6 max-w-screen-lg mx-auto border border-emerald-600 rounded-lg p-2">
                 <h3 className="font-bold text-xl my-2 text-center">Categorization</h3>
-                <form onSubmit={handleFilter} className="flex gap-2 items-end justify-center border border-emerald-600 rounded-lg p-2">
+                <form onSubmit={handleFilter} className="flex flex-col lg:flex-row gap-2 items-center lg:items-end justify-center">
                     <div>
-                        <h3 className="font-bold">Brand Name</h3>
+                        <h3 className="font-bold">Select Brand</h3>
                         <select onChange={handleBrandNameChange} defaultValue={"select"} className="select select-bordered w-fit">
-                            <option value="">Select</option>
+                            <option value="">All</option>
                             <option value="SoundMagic">SoundMagic</option>
                             <option value="TechMate">TechMate</option>
                             <option value="ComputePro">ComputePro</option>
@@ -139,9 +141,9 @@ const Products = () => {
                         </select>
                     </div>
                     <div>
-                        <h3 className="font-bold">Category Name</h3>
+                        <h3 className="font-bold">Select Category</h3>
                         <select onChange={handleCategoryChange} defaultValue={"select"} className="select select-bordered w-fit">
-                            <option value="">Select</option>
+                            <option value="">All</option>
                             <option value="Electronics">Electronics</option>
                             <option value="Computers">Computers</option>
                             <option value="Home Appliances">Home Appliances</option>
@@ -160,15 +162,15 @@ const Products = () => {
                     <div>
                         <h3 className="font-bold">Price Range</h3>
                         <div className="border p-2 rounded">
-                            <input type="text" placeholder="Min" className="input input-sm input-bordered max-w-24" />
-                            <input type="text" placeholder="Max" className="input input-sm input-bordered max-w-24 ml-1" />
+                            <input onChange={(e) => setMinPrice(e.target.value)} type="number" min="0" placeholder="Min" className="input input-sm input-bordered max-w-24" />
+                            <input onChange={(e) => setMaxPrice(e.target.value)} type="number" min="0" placeholder="Max" className="input input-sm input-bordered max-w-24 ml-1" />
                         </div>
                     </div>
                     <input type="submit" value="Apply Filter" className="btn bg-emerald-600 text-white" />
                 </form>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {
+                {!products ? <h2 className="text-5xl font-semibold text-center my-6">No Products Found</h2> :
                     products?.map(product => <Product key={product._id} product={product}></Product>)
                 }
             </div>
